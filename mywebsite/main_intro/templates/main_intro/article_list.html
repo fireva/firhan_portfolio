@@ -1,0 +1,54 @@
+{% extends "main_intro/base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <!-- Main Content -->
+        <div class="col-md-8">
+            <h1 class="mb-4">Articles</h1>
+            <div class="list-group">
+                {% for article in articles %}
+                    <div class="list-group-item mb-3 border rounded">
+                        <h2>
+                            <a href="{% url 'article_detail' article.pk %}" class="text-decoration-none text-dark">
+                                {{ article.title }}
+                            </a>
+                        </h2>
+                        <small class="text-muted">Published: {{ article.date_created }}</small>
+                        <p class="mt-2">
+                            {{ article.get_thumbnail }}
+                            <a href="{% url 'article_detail' article.pk %}" class="text-primary">Read More...</a>
+                        </p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- Sidebar -->
+        <div class="col-md-4">
+          <h4>Articles by Month</h4>
+          <div class="list-group">
+              {% if articles_by_month %}
+                  {% for month, month_articles in articles_by_month.items %}
+                      <div class="list-group-item">
+                          <strong>{{ month }}</strong>
+                          <ul class="mt-2">
+                              {% for article in month_articles %}
+                                  <li>
+                                      <a href="{% url 'article_detail' article.pk %}" class="text-decoration-none">
+                                          {{ article.title }}
+                                      </a>
+                                  </li>
+                              {% endfor %}
+                          </ul>
+                      </div>
+                  {% endfor %}
+              {% else %}
+                  <p>No articles found by month.</p>
+              {% endif %}
+          </div>
+      </div>
+      
+    </div>
+</div>
+{% endblock %}

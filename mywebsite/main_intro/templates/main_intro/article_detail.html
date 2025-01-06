@@ -1,0 +1,76 @@
+{% extends "main_intro/base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <!-- Main Content -->
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h1 class="card-title">{{ article.title }}</h1>
+                    <p class="text-muted">Created: {{ article.date_created }}</p>
+                    <hr>
+                    <div class="card-text">
+                        {{ article.content|safe }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comments Section -->
+            <div class="card mt-4">
+              <div class="card-body">
+                  <h2 class="card-title">Comments</h2>
+                  <ul class="list-group list-group-flush">
+                      {% if article.comments.all %}
+                          {% for comment in article.comments.all %}
+                              <li class="list-group-item">
+                                  <p>{{ comment.content }}</p>
+                                  <small class="text-muted">Posted on: {{ comment.date_created }}</small>
+                              </li>
+                          {% endfor %}
+                      {% else %}
+                          <li class="list-group-item">
+                              <p class="text-muted">No comments yet.</p>
+                          </li>
+                      {% endif %}
+                  </ul>
+              </div>
+          </div>
+          
+          <!-- Add Comment Form -->
+          <div class="card mt-4">
+              <div class="card-body">
+                  <h2 class="card-title">Leave a Comment</h2>
+                  <form method="post">
+                      {% csrf_token %}
+                      {{ form.as_p }}
+                      <button type="submit" class="btn btn-primary">Post Comment</button>
+                  </form>
+              </div>
+          </div>
+          
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-md-4">
+            <h4>Articles by Month</h4>
+            <div class="list-group">
+                {% for month, month_articles in articles_by_month.items %}
+                    <div class="list-group-item">
+                        <strong>{{ month }}</strong>
+                        <ul class="mt-2">
+                            {% for month_article in month_articles %}
+                                <li>
+                                    <a href="{% url 'article_detail' month_article.pk %}" class="text-decoration-none">
+                                        {{ month_article.title }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

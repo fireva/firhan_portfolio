@@ -1,0 +1,80 @@
+{% extends 'main_intro/base.html' %}
+
+{% block title %}About Me{% endblock %}
+
+{% block content %}
+<!-- Personal Info Section -->
+<!-- Personal Info Section -->
+<div class="d-flex justify-content-center">
+  <div class="card shadow-sm mb-4" style="max-width: 1200px; width: 100%;">
+      <div class="card-body row align-items-center">
+          <!-- Text Section -->
+          <div class="col-md-8">
+              <h1 class="card-title display-4">{{ personal_info.name }}</h1>
+              <p class="card-text lead">{{ personal_info.bio }}</p>
+          </div>
+          <!-- Photo Section -->
+          <div class="col-md-4 text-center">
+              <img src="{{ personal_info.photo.url }}" alt="Profile Photo" class="img-thumbnail" style="width: 100%; max-width: 300px; height: auto;">
+          </div>
+      </div>
+  </div>
+</div>
+
+
+<!-- Background Section -->
+<div class="d-flex justify-content-center">
+  <div class="mb-5" style="max-width: 1200px; width: 100%;">
+      <h2 class="h4 text-secondary">Experiences</h2>
+      <ul class="list-group mt-3">
+          {% for exp in experiences %}
+          <li class="list-group-item">
+              <div class="d-flex justify-content-between align-items-center">
+                  <span>
+                      <a class="text-decoration-none text-dark" data-bs-toggle="collapse" href="#exp-{{ forloop.counter }}" role="button" aria-expanded="false" aria-controls="exp-{{ forloop.counter }}">
+                          {{ exp.title }}
+                      </a>
+                  </span>
+                  {% if exp.link %}
+                  <a href="{{ exp.link }}" class="btn btn-outline-primary btn-sm">Read more</a>
+                  {% endif %}
+              </div>
+              <div class="collapse mt-2" id="exp-{{ forloop.counter }}">
+                {{ exp.description|safe }}
+              </div>
+          </li>
+          {% endfor %}
+      </ul>
+  </div>
+</div>
+
+<!-- Social Links Section -->
+<div class="d-flex justify-content-center">
+  <div class="mb-5" style="max-width: 1200px; width: 100%;">
+      <h2 class="h4 text-secondary">Find Me Online</h2>
+      <ul class="list-inline mt-3">
+          {% for link in social_links %}
+          <li class="list-inline-item">
+              <a href="{{ link.url }}" class="btn btn-outline-primary btn-sm" target="_blank" rel="noopener noreferrer">
+                  <i class="{{ link.icon }}"></i> {{ link.platform }}
+              </a>
+          </li>
+          {% endfor %}
+      </ul>
+  </div>
+</div>
+
+<!-- Personal Touch Section 
+<div class="d-flex justify-content-center">
+  <div class="mb-5" style="max-width: 1200px; width: 100%;">
+      <h2 class="h4 text-secondary">A Little More About Me</h2>
+      <p>
+          Outside of work, I enjoy playing <strong>Crusader Kings 3</strong>, where I’ve managed dynasties and strategized invasions. I’m currently focusing on cultural bonuses in Persian duchies. 
+      </p>
+      <p>
+          I’m also exploring AI projects like automating bug fixes on GitHub and envisioning AI solutions for impactful industries in Indonesia, such as trash processing and agriculture.
+      </p>
+  </div>
+</div>
+-->
+{% endblock %}
