@@ -39,7 +39,7 @@ DJANGO_ENVIRONMENT = os.environ['DJANGO_ENVIRONMENT']
 if DJANGO_ENVIRONMENT == "production":
     DEBUG = False
 else:
-    DEBUG = False
+    DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
