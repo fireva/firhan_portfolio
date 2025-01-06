@@ -12,6 +12,14 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+import environ
+
+
+env = environ.Env()
+environ.Env.read_env()
+
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -24,9 +32,16 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Absolute path to the media folde
 SECRET_KEY = 'django-insecure-^qikv6l6xrs#*%%=ebpt*$1npice7%spuq275n#khis!z0xs42'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DJANGO_DEVELOPMENT = os.environ['DJANGO_DEBUG']
+DJANGO_ENVIRONMENT = os.environ['DJANGO_ENVIRONMENT']
 
-ALLOWED_HOSTS = []
+
+if DJANGO_ENVIRONMENT == "production":
+    DEBUG = False
+else:
+    DEBUG = False
+
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -117,14 +132,10 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
+STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 
-STATIC_URL = '/static/'
-
-STATICFILES_DIRS = [
-    BASE_DIR / "main_intro/static",  # Include your app's static folder
-]
-
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
