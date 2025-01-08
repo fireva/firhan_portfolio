@@ -13,9 +13,9 @@ def about(request):
     experiences = Experience.objects.all()
 
     social_links = [
-        {"platform": "Twitter", "url": "https://twitter.com/FirhanDragneel", "icon": "fab fa-twitter"},
         {"platform": "Facebook", "url": "https://facebook.com/firhan.huzaefa", "icon": "fab fa-facebook-f"},
         {"platform": "Instagram", "url": "https://instagram.com/firhanhz", "icon": "fab fa-instagram"},
+        {"platform": "Twitter", "url": "https://twitter.com/FirhanDragneel", "icon": "fab fa-twitter"},
         {"platform": "LinkedIn", "url": "https://linkedin.com/in/firhan-huzaefa-985462147", "icon": "fab fa-linkedin-in"},
     ]
     # Pass the data to the template
