@@ -1,10 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import PersonalInfo, Experience, SocialLink,Article
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect,JsonResponse
 from django.core.paginator import Paginator
 from collections import defaultdict
 from .forms import CommentForm  # Create this form
 import time 
+import json
 # Create your views here.
 def about(request):
     # Fetch the data for the About Me page
@@ -71,3 +72,24 @@ def article_detail(request, pk):
         'articles_by_month': articles_by_month,
         'form': form,
     })
+    
+
+def update_likes_dislikes(request, article_id):
+    print("Trigger update like dislikes")
+    article = get_object_or_404(Article, pk=article_id)
+    
+    try:
+        data = json.loads(request.body)
+        action = data.get('action')  # Either "like" or "dislike"
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON'}, status=400)
+    
+    print("Action:", action)
+    
+    if action == "like":
+        article.likes += 1
+    elif action == "dislike":
+        article.dislikes += 1
+    
+    article.save()
+    return JsonResponse({'likes': article.likes, 'dislikes': article.dislikes})

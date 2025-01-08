@@ -31,8 +31,9 @@
           <li class="list-group-item">
               <div class="d-flex justify-content-between align-items-center">
                   <span>
-                      <a class="text-decoration-none text-dark" data-bs-toggle="collapse" href="#exp-{{ forloop.counter }}" role="button" aria-expanded="false" aria-controls="exp-{{ forloop.counter }}">
+                      <a class="text-decoration-none text-dark d-flex align-items-center" data-bs-toggle="collapse" href="#exp-{{ forloop.counter }}" role="button" aria-expanded="false" aria-controls="exp-{{ forloop.counter }}">
                           {{ exp.title }}
+                          <i class="ms-2 fas fa-chevron-down" data-bs-toggle="tooltip" title="Click to expand"></i>
                       </a>
                   </span>
                   {% if exp.link %}
@@ -40,13 +41,14 @@
                   {% endif %}
               </div>
               <div class="collapse mt-2" id="exp-{{ forloop.counter }}">
-                {{ exp.description|safe }}
+                  {{ exp.description|safe }}
               </div>
           </li>
           {% endfor %}
       </ul>
   </div>
 </div>
+
 
 <!-- Social Links Section -->
 <div class="d-flex justify-content-center">
@@ -61,6 +63,57 @@
           </li>
           {% endfor %}
       </ul>
+  </div>
+</div>
+
+<!-- Education Section -->
+<div class="d-flex justify-content-center">
+  <div class="mb-5" style="max-width: 1200px; width: 100%;">
+      <h2 class="h4 text-secondary">Education</h2>
+      <ul class="list-group mt-3">
+          <!-- Education Item 1 -->
+          <li class="list-group-item">
+              <div class="d-flex flex-column flex-md-row justify-content-between">
+                  <div>
+                      <h5 class="mb-1">National Cheng Kung University</h5>
+                      <p class="mb-1 text-muted">Master's degree, Mechanical Engineering</p>
+                  </div>
+                  <p class="text-muted">2017 - 2019</p>
+              </div>
+          </li>
+          <!-- Education Item 2 -->
+          <li class="list-group-item">
+              <div class="d-flex flex-column flex-md-row justify-content-between">
+                  <div>
+                      <h5 class="mb-1">Institut Teknologi Sepuluh Nopember</h5>
+                      <p class="mb-1 text-muted">Bachelor of Engineering (BEng), Mechanical Engineering</p>
+                  </div>
+                  <p class="text-muted">2012 - 2016</p>
+              </div>
+          </li>
+      </ul>
+  </div>
+</div>
+
+
+
+<!-- Publications Section -->
+<div class="d-flex justify-content-center">
+  <div class="card shadow-sm mb-5" style="max-width: 1200px; width: 100%;">
+      <div class="card-body">
+          <h2 class="h4 text-secondary mb-4">Publications</h2>
+          <div class="mb-3">
+              <p class="mb-0"><strong>F. Huzaefa and Y.-C. Liu</strong></p>
+              <p class="mb-0">
+                  "Centralized Control Architecture for Cooperative Object Transportation using Multiple Omnidirectional AGVs," 
+                  2019 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS), Macau, China, 2019, pp. 6526-6532,
+                  doi: <a href="https://doi.org/10.1109/IROS40897.2019.8968499" target="_blank">10.1109/IROS40897.2019.8968499</a>.
+              </p>
+              <p class="text-muted">
+                  <strong>Keywords:</strong> Cooperative transportation, multi-AGV system, force distribution, mecanum-wheeled platform
+              </p>
+          </div>
+      </div>
   </div>
 </div>
 

@@ -16,6 +16,28 @@
                 </div>
             </div>
 
+            <div class="d-flex align-items-center mt-3" style="justify-content: flex-start;">
+              <!-- Up Button -->
+              <button class="btn btn-success" onclick="updateLikeDislike({{ article.id }}, 'like')">
+                👍 Like 
+            </button>
+          
+              <!-- Like-Dislike Difference -->
+              <span id="like-dislike-diff" class="fs-4 fw-bold" style="min-width: 50px; text-align: center;">
+                  {{ article.likes|add:"-1"|add:article.dislikes }}
+              </span>
+          
+              <!-- Down Button -->
+              <button class="btn btn-danger" onclick="updateLikeDislike({{ article.id }}, 'dislike')">
+                👎 Dislike 
+            </button>
+          </div>
+
+
+
+
+
+
             <!-- Comments Section -->
             <div class="card mt-4">
               <div class="card-body">
@@ -73,4 +95,37 @@
         </div>
     </div>
 </div>
+
+<script>
+  function getCSRFToken() {
+    const name = 'csrftoken';
+    const cookies = document.cookie.split(';');
+    for (let cookie of cookies) {
+        cookie = cookie.trim();
+        if (cookie.startsWith(name + '=')) {
+            return cookie.substring(name.length + 1);
+        }
+    }
+    return null;
+}
+
+function updateLikeDislike(articleId, action) {
+    fetch(`/articles/update-likes-dislikes/${articleId}/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCSRFToken(),
+        },
+        body: JSON.stringify({ action: action })
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Update the difference between likes and dislikes
+        const diffSpan = document.getElementById('like-dislike-diff');
+        diffSpan.textContent = data.likes - data.dislikes;
+    })
+    .catch(error => console.error('Error:', error));
+}
+  </script>
+
 {% endblock %}

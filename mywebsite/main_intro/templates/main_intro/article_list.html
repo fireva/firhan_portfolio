@@ -16,8 +16,8 @@
                         </h2>
                         <small class="text-muted">Published: {{ article.date_created }}</small>
                         <p class="mt-2">
-                            {{ article.get_thumbnail }}
-                            <a href="{% url 'article_detail' article.pk %}" class="text-primary">Read More...</a>
+                          {{ article.get_thumbnail|safe }}
+                          <a href="{% url 'article_detail' article.pk %}" class="text-primary">Read More...</a>
                         </p>
                     </div>
                 {% endfor %}

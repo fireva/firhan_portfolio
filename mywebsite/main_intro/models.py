@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.timezone import now
 from ckeditor.fields import RichTextField
 from django.utils.html import strip_tags
+from django.utils.text import Truncator
 
 class PersonalInfo(models.Model):
     name = models.CharField(max_length=100)
@@ -10,7 +11,7 @@ class PersonalInfo(models.Model):
 
 class Experience(models.Model):
     title = models.CharField(max_length=200)
-    description = RichTextField()
+    description = RichTextField(default="")
     link = models.URLField(blank=True, null=True)
 
 class SocialLink(models.Model):
@@ -24,11 +25,13 @@ class Article(models.Model):
     content = RichTextField()
     date_created = models.DateTimeField(default=now)
     date_updated = models.DateTimeField(auto_now=True)
+    likes = models.IntegerField(default=0)  # New field for likes
+    dislikes = models.IntegerField(default=0)  # New field for dislikes
     def get_thumbnail(self):
-        # Strip HTML tags and split by newline or paragraphs
         plain_text = strip_tags(self.content)
         paragraphs = plain_text.split("\n")
-        return paragraphs[0] if paragraphs else plain_text
+        first_paragraph = paragraphs[0] if paragraphs else plain_text
+        return Truncator(first_paragraph).chars(400, truncate='...')  # Limit to 200 characters
     
     def __str__(self):
         return self.title

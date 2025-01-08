@@ -10,4 +10,5 @@ urlpatterns = [
     path('about/', views.about, name='about'),  # About Me page
     path('articles/', views.article_list, name='article_list'),
     path('articles/<int:pk>/', views.article_detail, name='article_detail'),
+    path('articles/update-likes-dislikes/<int:article_id>/', views.update_likes_dislikes, name='update_likes_dislikes'),
 ]
