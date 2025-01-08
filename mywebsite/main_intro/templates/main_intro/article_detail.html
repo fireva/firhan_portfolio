@@ -1,6 +1,8 @@
 {% extends "main_intro/base.html" %}
 
 {% block content %}
+
+
 <div class="container mt-5">
     <div class="row">
         <!-- Main Content -->
@@ -18,17 +20,17 @@
 
             <div class="d-flex align-items-center mt-3" style="justify-content: flex-start;">
               <!-- Up Button -->
-              <button class="btn btn-success" onclick="updateLikeDislike({{ article.id }}, 'like')">
+              <button class="btn btn-light btn-outline-dark" onclick="updateLikeDislike({{ article.id }}, 'like')">
                 👍 Like 
             </button>
           
               <!-- Like-Dislike Difference -->
               <span id="like-dislike-diff" class="fs-4 fw-bold" style="min-width: 50px; text-align: center;">
-                  {{ article.likes|add:"-1"|add:article.dislikes }}
+                  {{ like_dislike_diff }}
               </span>
           
               <!-- Down Button -->
-              <button class="btn btn-danger" onclick="updateLikeDislike({{ article.id }}, 'dislike')">
+              <button class="btn btn-light btn-outline-dark" onclick="updateLikeDislike({{ article.id }}, 'dislike')">
                 👎 Dislike 
             </button>
           </div>
@@ -109,23 +111,57 @@
     return null;
 }
 
+let userAction = null; // Track the last action ("like" or "dislike")
+
 function updateLikeDislike(articleId, action) {
+    const isTogglingOff = userAction === action; // Same action clicked twice
+    const previousAction = userAction;
+
     fetch(`/articles/update-likes-dislikes/${articleId}/`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': getCSRFToken(),
         },
-        body: JSON.stringify({ action: action })
+        body: JSON.stringify({ action, isTogglingOff, previousAction })
     })
     .then(response => response.json())
     .then(data => {
-        // Update the difference between likes and dislikes
+        // Update the like-dislike difference
         const diffSpan = document.getElementById('like-dislike-diff');
         diffSpan.textContent = data.likes - data.dislikes;
+
+        // Get button elements
+        const likeButton = document.querySelector(`button[onclick="updateLikeDislike(${articleId}, 'like')"]`);
+        const dislikeButton = document.querySelector(`button[onclick="updateLikeDislike(${articleId}, 'dislike')"]`);
+
+        if (isTogglingOff) {
+            // Reset buttons if toggling off
+            likeButton.classList.remove('btn-success');
+            likeButton.classList.add('btn-light', 'btn-outline-dark');
+            dislikeButton.classList.remove('btn-success');
+            dislikeButton.classList.add('btn-light', 'btn-outline-dark');
+            userAction = null; // Reset user action
+        } else {
+            // Highlight the current action and reset the other
+            if (action === 'like') {
+                likeButton.classList.remove('btn-light', 'btn-outline-dark');
+                likeButton.classList.add('btn-success');
+                dislikeButton.classList.remove('btn-success');
+                dislikeButton.classList.add('btn-light', 'btn-outline-dark');
+            } else if (action === 'dislike') {
+                dislikeButton.classList.remove('btn-light', 'btn-outline-dark');
+                dislikeButton.classList.add('btn-success');
+                likeButton.classList.remove('btn-success');
+                likeButton.classList.add('btn-light', 'btn-outline-dark');
+            }
+            userAction = action; // Update user action
+        }
     })
     .catch(error => console.error('Error:', error));
 }
+
+
   </script>
 
 {% endblock %}

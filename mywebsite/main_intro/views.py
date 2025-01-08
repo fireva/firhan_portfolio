@@ -55,7 +55,7 @@ def article_detail(request, pk):
         month = art.date_created.strftime('%B %Y')
         articles_by_month[month].append(art)
     articles_by_month = dict(articles_by_month)
-
+    like_dislike_diff = article.likes - article.dislikes
     # Handle comment submission
     if request.method == 'POST':
         form = CommentForm(request.POST)
@@ -70,26 +70,34 @@ def article_detail(request, pk):
     return render(request, 'main_intro/article_detail.html', {
         'article': article,
         'articles_by_month': articles_by_month,
+        'like_dislike_diff':like_dislike_diff,
         'form': form,
     })
     
 
 def update_likes_dislikes(request, article_id):
-    print("Trigger update like dislikes")
     article = get_object_or_404(Article, pk=article_id)
-    
-    try:
-        data = json.loads(request.body)
-        action = data.get('action')  # Either "like" or "dislike"
-    except json.JSONDecodeError:
-        return JsonResponse({'error': 'Invalid JSON'}, status=400)
-    
-    print("Action:", action)
-    
-    if action == "like":
-        article.likes += 1
-    elif action == "dislike":
-        article.dislikes += 1
-    
+    data = json.loads(request.body)
+    action = data.get('action')
+    is_toggling_off = data.get('isTogglingOff', False)
+    previous_action = data.get('previousAction')
+
+    if is_toggling_off:
+        # If toggling off, invalidate the previous action
+        if previous_action == 'like':
+            article.likes -= 1
+        elif previous_action == 'dislike':
+            article.dislikes -= 1
+    else:
+        # Apply the new action and invalidate the previous one if needed
+        if action == 'like':
+            article.likes += 1
+            if previous_action == 'dislike':
+                article.dislikes -= 1
+        elif action == 'dislike':
+            article.dislikes += 1
+            if previous_action == 'like':
+                article.likes -= 1
+
     article.save()
     return JsonResponse({'likes': article.likes, 'dislikes': article.dislikes})
